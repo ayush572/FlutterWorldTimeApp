@@ -1,54 +1,56 @@
 import 'package:flutter/material.dart';
+import 'quote.dart';
+import 'quote_card.dart';
 
 void main() {
   runApp(MaterialApp(
-    home: Home()
+    home: QuoteList()
   ));
 }
 
-//now we are creating a stateless widget, and hence, as it's a class so it makes our 
-//code dry, means, DRY -> Don't repeat yourself
-class Home extends StatelessWidget {
-  const Home({Key? key}) : super(key: key);
+class QuoteList extends StatefulWidget {
+  const QuoteList({Key? key}) : super(key: key);
+
+  @override
+  State<QuoteList> createState() => _QuoteListState();
+}
+
+class _QuoteListState extends State<QuoteList> {
+  List<Quote> quotes = [
+    Quote('Don\'t see through the eyes, but see through the mind', 'Ayush Daga'),
+    Quote('Games are the best way to understand any task or situation as they provide instant feedback', 'Bindiya Daga'),
+    Quote('You can save by spending more!', 'Vikas Daga')
+
+  ];
+  // Add a function to handle quote deletion
+  void deleteQuote(Quote quote) {
+    setState(() {
+      quotes.remove(quote);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
-        title: Text("Flutter App"),
+        title: Text("Awesome Quotes"),
         centerTitle: true,
-        backgroundColor: Colors.green[400],
+        backgroundColor: Colors.redAccent,
       ),
-      body: Row(
-        children: [
-          Expanded(
-            child: Container(
-              child: Text("1"),
-              color: Colors.cyan,
-              padding: EdgeInsets.all(20.0),
-        ),
-          ),
-          Expanded(
-            child: Container(
-              child: Text("2"),
-              color: Colors.amber,
-              padding: EdgeInsets.all(20.0),
-            ),
-          ),
-          Expanded(
-            child: Container(
-              child: Text("3"),
-              color: Colors.orangeAccent,
-              padding: EdgeInsets.all(20.0),
-            ),
-          ),]
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: quotes.map((quote) => QuoteCard(
+
+          quote: quote,
+          delete: deleteQuote // Pass the deleteQuote function
+        )).toList(),
       ),
-
-
-
-      floatingActionButton: FloatingActionButton(onPressed: null,child: Text("click"),backgroundColor: Colors.green,),
     );
   }
 }
+
+
+
 
 
