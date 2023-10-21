@@ -7,6 +7,7 @@ class WorldTime {
   String time = ""; // time at that location
   String flag; // flag of the country
   String endpoint; // url location for API endpoint
+  bool isDayTime = true;
 
   WorldTime({required this.location, required this.flag, required this.endpoint});
 
@@ -25,6 +26,8 @@ class WorldTime {
 
       now = now.add(Duration(hours: int.parse(offset1))); // Convert the string to int
       // Set the time property
+      //time between 6am and 8pm
+      isDayTime = now.hour > 6 && now.hour < 18 ? true : false;
       time = DateFormat.jm().format(now);
     }
     catch(e){
