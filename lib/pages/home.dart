@@ -11,7 +11,7 @@ class _HomeState extends State<Home> {
   Map<dynamic, dynamic> data = {};
   @override
   Widget build(BuildContext context) {
-    data = ModalRoute.of(context)!.settings.arguments as Map<dynamic, dynamic>;
+    data = data.isNotEmpty ? data : ModalRoute.of(context)!.settings.arguments as Map<dynamic, dynamic>;
     print("data is"+data.toString());
     String bgImg = data['isDayTime'] ? 'day.jpg' : 'night.jpg';
     Color bgColor = data['isDayTime'] ? Colors.blue : Colors.indigo;
@@ -29,9 +29,17 @@ class _HomeState extends State<Home> {
             child: Column(
               children: [
                 TextButton.icon(
-                  onPressed: () {
+                  onPressed: () async {
                     // navigating to different screen
-                    Navigator.pushNamed(context, '/location');
+                    dynamic result = await Navigator.pushNamed(context, '/location');
+                    setState(() {
+                      data = {
+                        'time' : result['time'],
+                        'location' : result['location'],
+                        'flag' : result['flag'],
+                        'isDayTime' : result['isDayTime'],
+                      };
+                    });
                   },
                   icon: Icon(
                       Icons.edit_location,

@@ -15,10 +15,30 @@ class _ChooseLocationState extends State<ChooseLocation> {
     WorldTime(endpoint: 'Africa/Cairo', location: 'Cairo', flag: 'egypt.png'),
     WorldTime(endpoint: 'Africa/Nairobi', location: 'Nairobi', flag: 'kenya.png'),
     WorldTime(endpoint: 'America/Chicago', location: 'Chicago', flag: 'usa.png'),
-    WorldTime(endpoint: 'Asia/India', location: 'New York', flag: 'india.png'),
+    WorldTime(endpoint: 'Asia/KolKata', location: 'India', flag: 'india.png'),
     WorldTime(endpoint: 'Asia/Seoul', location: 'Seoul', flag: 'south_korea.png'),
     WorldTime(endpoint: 'Asia/Jakarta', location: 'Jakarta', flag: 'indonesia.png'),
   ];
+
+  void updateTime(index) async{
+
+    //no new instance created but rather only the instance is stored inside this
+    //local variable
+    WorldTime instance = locations[index];
+
+    //from here, we have to pass the data to the home screen
+    await instance.getTime();
+
+    //navigate to home screen with data
+    //popping the previous screen that's sitting below it and updating the same
+    //by passing the data to the home screen
+    Navigator.pop(context,{
+      'location' : instance.location,
+      'flag' : instance.flag,
+      'time' : instance.time,
+      'isDayTime' : instance.isDayTime
+    });
+  }
   @override
   Widget build(BuildContext context) {
     print('Build fucntion ran');
@@ -30,6 +50,21 @@ class _ChooseLocationState extends State<ChooseLocation> {
         centerTitle: true,
         elevation: 0,
       ),
+      body: ListView.builder(
+        itemBuilder: (context,i){
+          return Card(
+            child: ListTile(
+              onTap: (){
+              updateTime(i);
+              },
+              title: Text(locations[i].location),
+              leading: CircleAvatar(
+                backgroundImage: AssetImage('assets/${locations[i].flag}'),
+              ),
+            )
+          );
+        },
+        itemCount: locations.length,)
     );
   }
 }
